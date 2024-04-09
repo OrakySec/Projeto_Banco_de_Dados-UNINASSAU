@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reprodução de Músicas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .music-container {
+            display: inline-block;
+            margin: 20px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        img {
+            max-width: 200px;
+            max-height: 200px;
+            margin-bottom: 10px;
+        }
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="music-container" id="music-container">
+        <!-- Conteúdo da música será inserido aqui via JavaScript -->
+    </div>
+
+    <script>
+        // Função para carregar as músicas via AJAX
+        function loadMusic() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var musicData = JSON.parse(this.responseText);
+                    displayMusic(musicData);
+                }
+            };
+            xhttp.open("GET", "musicas.php", true);
+            xhttp.send();
+        }
+
+        // Função para exibir as informações da música na página
+        function displayMusic(musicData) {
+            var musicContainer = document.getElementById('music-container');
+            musicContainer.innerHTML = `
+                <img src="${musicData.image}" alt="Imagem da Música">
+                <h2>${musicData.name}</h2>
+                <p>Enviado por: ${musicData.artist}</p>
+                <audio controls>
+                    <source src="${musicData.audio}" type="audio/mpeg">
+                    Seu navegador não suporta áudio HTML5.
+                </audio>
+            `;
+        }
+
+        // Carrega a música ao carregar a página
+        window.onload = function() {
+            loadMusic();
+        };
+    </script>
+</body>
+</html>
